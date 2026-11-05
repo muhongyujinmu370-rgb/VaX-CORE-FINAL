@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b12">
+  <meta name="description" content="VaX CORE official - Personal Fitness System">
+  <title>VaX CORE official | Ver 4.1</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <a href="#" class="logo" data-go="home">VaX <span>CORE</span></a>
+  <div class="header-right">
+    <span class="header-label">OFFICIAL FITNESS SYSTEM</span>
+    <span id="currentDate"></span>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- NAVIGATION -->
+  <nav class="sidebar" id="sidebar" aria-label="メインメニュー">
+    <div class="nav-title">MAIN MENU</div>
+    <button type="button" class="nav-btn active" data-page="home">⌂ ホーム</button>
+    <button type="button" class="nav-btn" data-page="workout">◈ トレーニング</button>
+    <button type="button" class="nav-btn" data-page="hiit">⏱ タイマー</button>
+    <button type="button" class="nav-btn" data-page="sleep">☾ おやすみモード</button>
+    <button type="button" class="nav-btn" data-page="history">▦ 記録・履歴</button>
+    <button type="button" class="nav-btn" data-page="exercises">▤ 種目管理</button>
+    <button type="button" class="nav-btn" data-page="settings">⚙ 設定</button>
+  </nav>
+
+  <main id="mainContent">
+
+    <!-- HOME -->
+    <section id="home" class="page active">
+      <div class="eyebrow">PERSONAL FITNESS SYSTEM</div>
+      <h1>おかえりなさい。</h1>
+      <p class="subtitle" id="homeDate">今日も自分のペースで。</p>
+
+      <div class="hero">
+        <div class="eyebrow">YOUR TRAINING STARTS HERE</div>
+        <h2>BUILD YOUR<br><span>OWN CORE.</span></h2>
+        <p>日々の積み重ねが、未来の自分を作る。</p>
+        <button type="button" class="btn" data-go="workout">トレーニング開始 →</button>
+      </div>
+
+      <h2 class="section-title">今日のステータス</h2>
+      <div class="grid stats-grid">
+        <div class="card stat-card">
+          <div class="card-title">記録日数</div>
+          <div class="stat" id="totalDays">0</div>
+          <small>日</small>
+        </div>
+        <div class="card stat-card">
+          <div class="card-title">総レップ数</div>
+          <div class="stat" id="totalReps">0</div>
+          <small>回</small>
+        </div>
+        <div class="card stat-card">
+          <div class="card-title">総挙上重量</div>
+          <div class="stat" id="totalVolume">0</div>
+          <small>kg</small>
+        </div>
+        <div class="card stat-card">
+          <div class="card-title">今月の記録日数</div>
+          <div class="stat" id="monthDays">0</div>
+          <small>日</small>
+        </div>
+        <div class="card stat-card">
+          <div class="card-title">登録種目数</div>
+          <div class="stat" id="exerciseCount">0</div>
+          <small>種目</small>
+        </div>
+        <div class="card stat-card">
+          <div class="card-title">最終トレーニング</div>
+          <div class="stat stat-small" id="lastDate">---</div>
+        </div>
+      </div>
+
+      <h2 class="section-title">クイックアクセス</h2>
+      <div class="grid quick-grid">
+        <button type="button" class="card quick-card" data-go="workout">
+          <span class="quick-icon">◈</span>
+          <h3>筋トレ開始</h3>
+          <p>トレーニング画面へ</p>
+        </button>
+        <button type="button" class="card quick-card" data-go="hiit">
+          <span class="quick-icon">⏱</span>
+          <h3>タイマー</h3>
+          <p>HIIT・テンポ・休憩</p>
+        </button>
+        <button type="button" class="card quick-card" data-go="sleep">
+          <span class="quick-icon">☾</span>
+          <h3>おやすみ</h3>
+          <p>5分間のリラックス</p>
+        </button>
+        <button type="button" class="card quick-card" data-go="history">
+          <span class="quick-icon">▦</span>
+          <h3>記録を見る</h3>
+          <p>過去のトレーニング</p>
+        </button>
+      </div>
+
+      <h2 class="section-title">最近の記録</h2>
+      <div class="card" id="recentActivity">
+        <p class="empty-message">まだ記録がありません。</p>
+      </div>
+    </section>
+
+    <!-- WORKOUT -->
+    <section id="workout" class="page" hidden>
+      <div class="eyebrow">TRAINING MODE</div>
+      <h1>トレーニング</h1>
+      <p class="subtitle">種目・回数・セット数を入力してメニューを作り、開始しよう。</p>
+
+      <div class="card">
+        <div class="card-title">メニュー作成</div>
+        <div id="workoutPlanList"></div>
+        <button type="button" class="btn" id="addPlanRowBtn" style="margin-top:12px">＋ 種目を追加</button>
+        <p class="help-text">追加ボタンで入力欄が増えます。好きなメニューを組み立ててください。</p>
+      </div>
+
+      <div class="card">
+        <div class="field">
+          <label for="wMemo">メモ（任意）</label>
+          <textarea id="wMemo" placeholder="今日の調子や気づいたこと"></textarea>
+        </div>
+        <div class="field">
+          <label for="wRest">セット間休憩の目安 (秒)</label>
+          <input id="wRest" type="number" min="0" value="60">
+        </div>
+        <button type="button" class="btn" id="startSessionBtn">トレーニング開始</button>
+        <p id="sessionStatus" class="status-text" aria-live="polite">待機中</p>
+      </div>
+
+      <!-- 互換用の隠し要素（既存JSが参照） -->
+      <select id="wExercise" hidden></select>
+      <input id="wSets" type="hidden" value="3">
+      <input id="wWeight" type="hidden" value="0">
+      <input id="wDown" type="hidden" value="3">
+      <input id="wUp" type="hidden" value="1">
+      <span id="wTypeBadge" hidden></span>
+      <span id="wCategory" hidden></span>
+      <div id="weightedFields" hidden></div>
+      <div id="tempoFields" hidden></div>
+      <div id="previousRecord" hidden>記録なし</div>
+
+      <div class="card workout-panel">
+        <div class="row">
+          <span>現在のセット</span>
+          <span id="setLabel">1 / 3 セット</span>
+        </div>
+        <div id="currentPlanLabel" class="help-text" style="margin-bottom:8px"></div>
+        <div id="repPanel">
+          <div class="big-number" id="repCount" aria-live="polite">0</div>
+          <p>現在の回数</p>
+          <button type="button" class="rep-button" id="addRepBtn">＋1</button>
+          <div class="actions">
+            <button type="button" id="undoRepBtn">1回戻す</button>
+            <button type="button" id="resetValueBtn">リセット</button>
+          </div>
+        </div>
+        <div id="timePanel" class="hidden" hidden>
+          <div class="timer-display" id="exerciseTimer">00:00</div>
+          <button type="button" id="exerciseTimerBtn">計測開始</button>
+          <button type="button" id="resetExerciseTimerBtn">リセット</button>
+        </div>
+        <div class="progress">
+          <div id="setProgress" class="progress-fill"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">この画面の経過時間</div>
+        <div class="timer-display" id="sessionClock">00:00</div>
+        <p class="help-text">トレーニング中は画面右上にも常時表示されます。</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">セット管理</div>
+        <button type="button" class="btn" id="saveSetBtn">現在のセットを保存 →</button>
+        <div id="saveStatus" class="status-text" aria-live="polite"></div>
+        <button type="button" class="btn btn-danger" id="finishSessionBtn">トレーニング終了</button>
+      </div>
+    </section>
+
+    <!-- TIMERS (HIIT + Tempo + Interval) -->
+    <section id="hiit" class="page" hidden>
+      <div class="eyebrow">TIMER HUB</div>
+      <h1>タイマー</h1>
+      <p class="subtitle">HIIT・テンポ・休憩タイマーをまとめて使えます。</p>
+
+      <div class="card">
+        <div class="card-title">HIIT・タバタ</div>
+        <div class="grid">
+          <div class="field">
+            <label for="hiitWork">運動時間 (秒)</label>
+            <input id="hiitWork" type="number" min="1" value="20">
+          </div>
+          <div class="field">
+            <label for="hiitRest">休憩時間 (秒)</label>
+            <input id="hiitRest" type="number" min="0" value="10">
+          </div>
+          <div class="field">
+            <label for="hiitRounds">ラウンド数</label>
+            <input id="hiitRounds" type="number" min="1" max="50" value="8">
+          </div>
+        </div>
+        <div class="hiit-display">
+          <div id="hiitPhase">READY</div>
+          <div class="big-number" id="hiitDisplay">00:20</div>
+          <div id="hiitRoundLabel">ROUND 1 / 8</div>
+        </div>
+        <div class="progress">
+          <div id="hiitProgress" class="progress-fill"></div>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn" id="startHiitBtn">開始</button>
+          <button type="button" id="pauseHiitBtn">一時停止</button>
+          <button type="button" class="btn btn-danger" id="stopHiitBtn">終了</button>
+        </div>
+        <div id="hiitStatus" class="status-text" aria-live="polite">準備完了</div>
+        <div id="hiitHistory"></div>
+      </div>
+
+      <div class="card" id="tempoCard">
+        <div class="card-title">TEMPO TIMER（上げ下げのテンポ）</div>
+        <div class="grid">
+          <div class="field">
+            <label for="wDown">下げる時間 (秒)</label>
+            <input id="wDown" type="number" min="1" value="3">
+          </div>
+          <div class="field">
+            <label for="wUp">上げる時間 (秒)</label>
+            <input id="wUp" type="number" min="1" value="1">
+          </div>
+        </div>
+        <div class="timer-display" id="tempoDisplay">00:00</div>
+        <div id="tempoStatus" class="status-text">待機中</div>
+        <div class="actions">
+          <button type="button" id="tempoBtn">開始</button>
+          <button type="button" id="stopTempoBtn">リセット</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">インターバル（休憩）タイマー</div>
+        <div class="timer-display" id="restDisplay">01:00</div>
+        <div id="restStatus" class="status-text">待機中</div>
+        <div class="actions">
+          <button type="button" id="startRestBtn">休憩開始</button>
+          <button type="button" id="stopRestBtn">停止</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLEEP -->
+    <section id="sleep" class="page" hidden>
+      <div class="eyebrow">NIGHT RECOVERY SYSTEM</div>
+      <h1>おやすみモード ☾</h1>
+      <p class="subtitle">今日の疲れをゆっくりリセットしよう。</p>
+
+      <div class="sleep-container">
+        <div class="sleep-header">
+          <div class="eyebrow">GOOD NIGHT ROUTINE</div>
+          <h2>RELAX YOUR BODY.</h2>
+          <p>5 MINUTES TO RECOVER.</p>
+        </div>
+
+        <div class="sleep-clock">
+          <div id="sleepClock" aria-live="off">05:00</div>
+          <span>残り時間</span>
+        </div>
+
+        <div class="progress">
+          <div id="sleepProgress" class="progress-fill"></div>
+        </div>
+
+        <div class="sleep-current">
+          <div id="sleepStageLabel">READY TO SLEEP</div>
+          <h2 id="sleepExerciseName">準備完了</h2>
+
+          <div class="sleep-image-area" id="sleepImageArea">
+            <div id="sleepPoseIcon">☾</div>
+            <img id="sleepPoseImage" src="" alt="ストレッチの姿勢" hidden>
+          </div>
+
+          <div class="sleep-instruction" id="sleepInstruction">
+            スタートを押して始めましょう。
+          </div>
+
+          <div class="sleep-phase-time" id="sleepPhaseTime">00:30</div>
+          <div id="sleepPhaseLabel">次の動作を待っています</div>
+        </div>
+
+        <div class="sleep-step-list">
+          <div class="sleep-stage" id="sleepStep0">
+            <span class="step-number">01</span>
+            <div>
+              <b>縦にのびのび脱力</b>
+              <small>30秒 · 全身リラックス</small>
+            </div>
+            <span class="step-status">待機</span>
+          </div>
+
+          <div class="sleep-stage" id="sleepStep1">
+            <span class="step-number">02</span>
+            <div>
+              <b>膝の抱え込み</b>
+              <small>60秒 · 右脚30秒 / 左脚30秒</small>
+            </div>
+            <span class="step-status">待機</span>
+          </div>
+
+          <div class="sleep-stage" id="sleepStep2">
+            <span class="step-number">03</span>
+            <div>
+              <b>片脚折りたたみ</b>
+              <small>90秒 · 左右各45秒</small>
+            </div>
+            <span class="step-status">待機</span>
+          </div>
+
+          <div class="sleep-stage" id="sleepStep3">
+            <span class="step-number">04</span>
+            <div>
+              <b>仰向けカエルのポーズ</b>
+              <small>90秒 · 股関節リラックス</small>
+            </div>
+            <span class="step-status">待機</span>
+          </div>
+
+          <div class="sleep-stage" id="sleepStep4">
+            <span class="step-number">05</span>
+            <div>
+              <b>そのまま就寝モード</b>
+              <small>30秒 · おやすみなさい</small>
+            </div>
+            <span class="step-status">待機</span>
+          </div>
+        </div>
+
+        <div class="sleep-controls">
+          <button type="button" class="btn sleep-start-btn" id="sleepStartBtn">おやすみモード開始</button>
+          <div class="actions">
+            <button type="button" id="sleepPauseBtn">一時停止</button>
+            <button type="button" id="sleepSkipBtn">次へ</button>
+            <button type="button" class="btn btn-danger" id="sleepStopBtn">終了</button>
+          </div>
+        </div>
+
+        <div class="sleep-footer" id="sleepMessage" aria-live="polite">
+          全5ステップ · 約5分
+        </div>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="history" class="page" hidden>
+      <div class="eyebrow">TRAINING ANALYTICS</div>
+      <h1>記録・履歴</h1>
+      <p class="subtitle">これまでの努力を振り返ろう。</p>
+
+      <div class="card">
+        <div class="row calendar-header">
+          <b>トレーニングカレンダー</b>
+          <div class="actions">
+            <button type="button" id="prevMonthBtn" aria-label="前の月">←</button>
+            <span id="calendarTitle"></span>
+            <button type="button" id="nextMonthBtn" aria-label="次の月">→</button>
+          </div>
+        </div>
+        <div class="calendar" id="calendar"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">記録一覧</div>
+        <div class="field">
+          <label for="historyFilter">種目で絞り込み</label>
+          <select id="historyFilter">
+            <option value="">すべての種目</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>日付</th>
+                <th>種目</th>
+                <th>記録</th>
+                <th>セット</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="historyTable"></tbody>
+          </table>
+        </div>
+        <div id="historyEmpty" class="empty-message">まだ記録がありません。</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">推定最大重量 (1RM)</div>
+        <div class="grid">
+          <div class="field">
+            <label for="rmWeight">重量 (kg)</label>
+            <input id="rmWeight" type="number" min="0" value="60">
+          </div>
+          <div class="field">
+            <label for="rmReps">回数</label>
+            <input id="rmReps" type="number" min="1" max="100" value="10">
+          </div>
+        </div>
+        <button type="button" id="calcRMBtn">計算</button>
+        <div class="stat" id="rmResult" aria-live="polite">-- kg</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">種目別の成長記録</div>
+        <label for="chartExercise">種目</label>
+        <select id="chartExercise"></select>
+        <div id="chartArea"></div>
+      </div>
+    </section>
+
+    <!-- EXERCISES -->
+    <section id="exercises" class="page" hidden>
+      <div class="eyebrow">EXERCISE DATABASE</div>
+      <h1>種目管理</h1>
+      <p class="subtitle">自分専用のメニューを登録しよう。</p>
+
+      <div class="card">
+        <div class="card-title">種目の追加・編集</div>
+        <input type="hidden" id="editExerciseId">
+
+        <div class="field">
+          <label for="exerciseName">種目名</label>
+          <input id="exerciseName" placeholder="例：腕立て伏せ">
+        </div>
+
+        <div class="field">
+          <label for="exerciseCategory">カテゴリー</label>
+          <select id="exerciseCategory">
+            <option>胸</option>
+            <option>背中</option>
+            <option>肩</option>
+            <option>腕</option>
+            <option>脚</option>
+            <option>腹筋</option>
+            <option>有酸素運動</option>
+            <option>その他</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="exerciseType">記録形式</label>
+          <select id="exerciseType">
+            <option value="bodyweight">自重・回数式</option>
+            <option value="weight">重量・回数式</option>
+            <option value="time">時間式</option>
+          </select>
+        </div>
+
+        <p class="help-text">
+          自重・回数式：重量入力なし<br>
+          重量・回数式：kgと回数を記録<br>
+          時間式：秒数を記録
+        </p>
+
+        <div class="actions">
+          <button type="button" id="saveExerciseBtn">保存</button>
+          <button type="button" id="clearExerciseBtn">クリア</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">登録済みの種目</div>
+        <div id="exerciseList"></div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="settings" class="page" hidden>
+      <div class="eyebrow">SYSTEM CONFIGURATION</div>
+      <h1>設定</h1>
+      <p class="subtitle">VaX COREを自分好みにカスタマイズ。</p>
+
+      <div class="card">
+        <div class="card-title">サウンド設定</div>
+        <div class="row setting-row">
+          <label for="soundEnabled">電子音を有効にする</label>
+          <input type="checkbox" id="soundEnabled" checked>
+        </div>
+        <div class="field">
+          <label for="soundVolume">音量</label>
+          <input type="range" id="soundVolume" min="0" max="1" step="0.05" value="0.5">
+        </div>
+        <div class="field">
+          <label for="soundType">音声タイプ</label>
+          <select id="soundType">
+            <option value="beep">電子音</option>
+            <option value="male">男性音声</option>
+            <option value="female">女性音声</option>
+          </select>
+        </div>
+        <button type="button" id="soundTestBtn">音声テスト</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">トレーニング初期設定</div>
+        <div class="field">
+          <label for="defaultSets">標準セット数</label>
+          <input id="defaultSets" type="number" min="1" max="30" value="3">
+        </div>
+        <div class="field">
+          <label for="defaultRest">標準休憩時間 (秒)</label>
+          <input id="defaultRest" type="number" min="0" value="60">
+        </div>
+        <button type="button" id="saveSettingsBtn">設定を保存</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">データ管理</div>
+        <div class="actions data-actions">
+          <button type="button" id="exportJSONBtn">完全バックアップ</button>
+          <button type="button" id="importJSONBtn">JSON復元</button>
+          <input type="file" id="jsonFile" accept=".json,application/json" hidden>
+        </div>
+        <hr>
+        <div class="actions data-actions">
+          <button type="button" id="exportCSVBtn">記録CSV書き出し</button>
+          <button type="button" id="importCSVBtn">記録CSV復元</button>
+          <input type="file" id="csvFile" accept=".csv,text/csv" hidden>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">システム情報</div>
+        <p>VaX CORE official</p>
+        <p>VERSION 3.1</p>
+        <p>PERSONAL FITNESS SYSTEM</p>
+        <button type="button" class="btn btn-danger" id="clearDataBtn">すべてのデータを初期化</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      VaX CORE OFFICIAL · VERSION 3.1
+    </footer>
+
+  </main>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<!-- JavaScript -->
+<script src="classic.js"></script>
+</body>
+</html>
