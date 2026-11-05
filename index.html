@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#080b12">
   <meta name="description" content="VaX CORE official - Personal Fitness System">
   <title>VaX CORE official | Ver 4.1</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<meta name="theme-color" content="#6d28d9">
 </head>
 <body>
 
@@ -556,5 +559,16 @@
 
 <!-- JavaScript -->
 <script src="classic.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(reg => console.log("VaX CORE PWA Ready:", reg.scope))
+      .catch(err => console.error("PWA Error:", err));
+  });
+}
+</script>
+
 </body>
 </html>
